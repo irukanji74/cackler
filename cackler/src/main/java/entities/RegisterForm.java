@@ -7,6 +7,7 @@ public class RegisterForm {
 	private String password;
 	private String passwordConfirm;
 	private String email;
+	private String newCommittttt;
 
 	public String getFirstName() {
 		return firstName;
