@@ -15,15 +15,18 @@ public class Employee extends BaseEntity {
 
 	@Column(name="first_name")
 	@NotEmpty
-	protected String firstName;
+	private String firstName;
 	
 	@Column(name="last_name")
 	@NotEmpty
-	protected String lastName;
+	private String lastName;
 	
 	@Column(name = "visit_date")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private DateTime date;
 	
+	@Column(name="salary")
+	@NotEmpty
+	private Integer salary;
 }
