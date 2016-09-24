@@ -1,22 +1,17 @@
-DROP TABLE vet_specialties IF EXISTS;
-DROP TABLE vets IF EXISTS;
-DROP TABLE specialties IF EXISTS;
-DROP TABLE visits IF EXISTS;
-DROP TABLE pets IF EXISTS;
-DROP TABLE types IF EXISTS;
-DROP TABLE owners IF EXISTS;
+DROP TABLE offices IF EXISTS;
+DROP TABLE employees IF EXISTS;
 
 
-CREATE TABLE vets (
+CREATE TABLE offices (
   id         INTEGER IDENTITY PRIMARY KEY,
-  first_name VARCHAR(30),
-  last_name  VARCHAR(30)
+  office_name VARCHAR(30)
 );
-CREATE INDEX vets_last_name ON vets (last_name);
 
-CREATE TABLE specialties (
+CREATE TABLE employees (
   id   INTEGER IDENTITY PRIMARY KEY,
-  name VARCHAR(80)
+  name VARCHAR(80),
+  surname VARCHAR(80),
+  birthday DATE
 );
 CREATE INDEX specialties_name ON specialties (name);
 
