@@ -8,7 +8,7 @@
 	<display-name>Cackler</display-name>
 	<description> Sample application</description>
 	
-<!-- In applicationContext.xml you might have… hibernate configuration and 
+<!-- In applicationContext.xml you might have … hibernate configuration and 
 		mappings <import resource="applicationContext-hibernate.xml"/> -->
 	<!-- There are two types of contexts we are dealing with: 
 	    1: root context 

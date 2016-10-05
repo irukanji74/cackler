@@ -58,7 +58,7 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 	@Override
 	public Collection<Department> findAll() throws DataAccessException {
 		Map<String, Object> params = new HashMap<>();
-		return this.namedParameterJdbcTemplate.query("SELECT office_name from offices"
+		return this.namedParameterJdbcTemplate.query("SELECT * from offices"
 				                                     , params
 				                                     , BeanPropertyRowMapper.newInstance(Department.class));
 		
