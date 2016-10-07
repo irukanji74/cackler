@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -61,7 +62,7 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 					
 				});
 				
-				/* Не работает!!!!!???????(
+				/* Why not working!!!!!???????(
 				"SELECT id, department_name FROM department"
                 , new HashMap<String, Object>()
                 , BeanPropertyRowMapper.newInstance(Department.class));*/
@@ -71,7 +72,11 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 
 	@Override
 	public void saveOrUpdate(Department department) throws DataAccessException {
-		// TODO Auto-generated method stub
+		String sqlQuery = "Insert into department (id, department_name) values (:id, :departmentName)";
+		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+		mapSqlParameterSource.addValue("id", department.getId());
+		mapSqlParameterSource.addValue("departmentName",department.getDepartmentName());
+		this.namedParameterJdbcTemplate.update(sqlQuery, mapSqlParameterSource);
 
 	}
 
