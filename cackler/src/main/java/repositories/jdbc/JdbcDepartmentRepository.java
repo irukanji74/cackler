@@ -1,5 +1,7 @@
 package repositories.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -46,8 +49,24 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 
 	@Override
 	public Collection<Department> findAllDepartments() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<Department> depts = this.namedParameterJdbcTemplate.query("SELECT id, department_name FROM department"
+				, new RowMapper<Department>(){
+					@Override
+					public Department mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Department department = new Department();
+						department.setId(rs.getInt("id"));
+						department.setDepartmentName("department_name");
+						return department;
+					}
+					
+				});
+				
+				/* Не работает!!!!!???????(
+				"SELECT id, department_name FROM department"
+                , new HashMap<String, Object>()
+                , BeanPropertyRowMapper.newInstance(Department.class));*/
+		System.err.println(depts.size());
+		return depts;
 	}
 
 	@Override
@@ -62,16 +81,11 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 
 	}
 
-	@Override
+	/*@Override
 	public Collection<Department> findAll() throws DataAccessException {
-		Map<String, Object> params = new HashMap<>();
-		Collection<Department> depts = this.namedParameterJdbcTemplate.query("SELECT id, office_name from offices"
-                , params
-                , BeanPropertyRowMapper.newInstance(Department.class));
-		System.err.println(depts.size());
-		return depts;
+		
 
-	}
+	}*/
 
 	@Override
 	public String findNameById(int id) throws DataAccessException {
