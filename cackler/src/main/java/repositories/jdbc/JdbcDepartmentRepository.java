@@ -18,23 +18,30 @@ import repositories.DepartmentRepository;
 
 @Repository
 public class JdbcDepartmentRepository implements DepartmentRepository {
-	
+
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
+
 	private SimpleJdbcInsert simpleJdbcInsert;
-	
+
 	@Autowired
 	public JdbcDepartmentRepository(DataSource dataSource) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-				                    .withTableName("offices")
-				                    .usingGeneratedKeyColumns("id");
+		System.out.println(namedParameterJdbcTemplate);
+		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("offices")
+				.usingGeneratedKeyColumns("id");
 	}
 
 	@Override
 	public Department findById(int id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		Department department;
+		Map<String, Object> params = new HashMap<>();
+		params.put("id", id);
+		System.out.println(id+"");
+		department = this.namedParameterJdbcTemplate.queryForObject("SELECT department_name FROM department WHERE id= :id"
+				                                                    , params
+				                                                    ,BeanPropertyRowMapper.newInstance(Department.class));
+		System.out.println(department.getDepartmentName());
+		return department;
 	}
 
 	@Override
@@ -58,10 +65,18 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 	@Override
 	public Collection<Department> findAll() throws DataAccessException {
 		Map<String, Object> params = new HashMap<>();
-		return this.namedParameterJdbcTemplate.query("SELECT * from offices"
-				                                     , params
-				                                     , BeanPropertyRowMapper.newInstance(Department.class));
-		
+		Collection<Department> depts = this.namedParameterJdbcTemplate.query("SELECT id, office_name from offices"
+                , params
+                , BeanPropertyRowMapper.newInstance(Department.class));
+		System.err.println(depts.size());
+		return depts;
+
+	}
+
+	@Override
+	public String findNameById(int id) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

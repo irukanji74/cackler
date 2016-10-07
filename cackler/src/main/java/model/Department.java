@@ -8,10 +8,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 // »ћ≈≈“ «ј¬»—»ћќ—“№ ќ“ Hibernate
 @Entity
-@Table(name = "Department")//можно не использовать если имена класса и таблицы совпадают
+@Table(name="department")//можно не использовать если имена класса и таблицы совпадают
 public class Department extends BaseEntity {
 
-	 @Column(name = "department_name")
+	 @Column(name="department_name")
 	 @NotEmpty
 	protected String departmentName;
 

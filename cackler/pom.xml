@@ -19,12 +19,7 @@
 		<jadira-usertype-core.version>3.2.0.GA</jadira-usertype-core.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -68,6 +63,12 @@
 
 
 		<!-- Juniting -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
 		<dependency>
 			<groupId>org.assertj</groupId>
@@ -144,7 +145,20 @@
 			<version>${jodatime-jsptags.version}</version>
 		</dependency>
 
-
+		<!-- TomCat -->
+		<!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jdbc -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>7.0.57</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>7.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>cackler</finalName>

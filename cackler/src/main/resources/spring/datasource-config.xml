@@ -21,6 +21,13 @@
     <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
     <!-- (in this case, JDBC-related settings for the dataSource definition below) -->
     <context:property-placeholder location="classpath:spring/data-access.properties" system-properties-mode="OVERRIDE"/>
+    
+    <!-- Database initializer. If any of the script fails, the initialization stops. -->
+    <!-- As an alternative, for embedded databases see <jdbc:embedded-database/>. -->
+    <jdbc:initialize-database data-source="dataSource">
+        <jdbc:script location="${jdbc.initLocation}"/>
+        <jdbc:script location="${jdbc.dataLocation}"/>
+    </jdbc:initialize-database>
 
     <!-- DataSource configuration for the tomcat jdbc connection pool 
     See here for more details on commons-dbcp versus tomcat-jdbc: 
@@ -29,15 +36,9 @@
           p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
           p:username="${jdbc.username}" p:password="${jdbc.password}"/>
 
-    <!-- Database initializer. If any of the script fails, the initialization stops. -->
-    <!-- As an alternative, for embedded databases see <jdbc:embedded-database/>. -->
-    <jdbc:initialize-database data-source="dataSource">
-        <jdbc:script location="${jdbc.initLocation}"/>
-        <jdbc:script location="${jdbc.dataLocation}"/>
-    </jdbc:initialize-database>
 
-   <!--  <beans profile="javaee">
-        JNDI DataSource for JEE environments
-        <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/petclinic"/>
-    </beans> -->
+    <beans profile="javaee">
+        <!-- JNDI DataSource for JEE environments -->
+        <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/cackler"/>
+    </beans> 
 </beans>

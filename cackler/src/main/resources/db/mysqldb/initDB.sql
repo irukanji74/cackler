@@ -1,20 +1,19 @@
 CREATE DATABASE IF NOT EXISTS cackler;
-GRANT ALL PRIVILEGES ON homework.* TO pc@localhost IDENTIFIED BY 'pc';
+GRANT ALL PRIVILEGES ON cackler.* TO pc@localhost IDENTIFIED BY 'pc';
 
 USE cackler;
 
-CREATE TABLE IF NOT EXISTS offices (
+CREATE TABLE IF NOT EXISTS department (
   id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  office_name VARCHAR(80)
+  department_name VARCHAR(80)
 ) engine=InnoDB;
 
-CREATE TABLE IF NOT EXISTS employees (
+CREATE TABLE IF NOT EXISTS employee (
   id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(30),
   last_name VARCHAR(30),
   birth_date DATE,
   salary INT(10) UNSIGNED NOT NULL,
-  office_id INT(4) UNSIGNED NOT NULL,
-  FOREIGN KEY (office_id) REFERENCES offices(id)
-  INDEX(last_name)
+  department_id INT(4) UNSIGNED NOT NULL,
+  FOREIGN KEY (department_id) REFERENCES department(id)
 ) engine=InnoDB;
