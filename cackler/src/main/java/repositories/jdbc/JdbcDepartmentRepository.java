@@ -81,16 +81,4 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 
 	}
 
-	/*@Override
-	public Collection<Department> findAll() throws DataAccessException {
-		
-
-	}*/
-
-	@Override
-	public String findNameById(int id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
