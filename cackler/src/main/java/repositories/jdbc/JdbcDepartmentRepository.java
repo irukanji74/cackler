@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -72,12 +73,22 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 
 	@Override
 	public void saveOrUpdate(Department department) throws DataAccessException {
-		String sqlQuery = "Insert into department (id, department_name) values (:id, :departmentName)";
+		//Version simplyfying and shortening the number of code
+		//this obj is retrieving all the properties from owner.
+		BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
+		//department.Number newKey = this.simpleJdbcInsert.executeAndReturnKey(parameterSource);
+		//System.out.println(newKey.intValue());
+		//department.setId(newKey.intValue());
+		this.namedParameterJdbcTemplate.update("Insert into department (id, department_name) values (:id, :departmentName)"
+				                               , parameterSource);
+		
+		//Primitive version, too much of code
+		/*String sqlQuery = "Insert into department (id, department_name) values (:id, :departmentName)";
 		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
 		mapSqlParameterSource.addValue("id", department.getId());
 		mapSqlParameterSource.addValue("departmentName",department.getDepartmentName());
 		this.namedParameterJdbcTemplate.update(sqlQuery, mapSqlParameterSource);
-
+*/
 	}
 
 	@Override
