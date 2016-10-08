@@ -22,7 +22,7 @@ public class CacklersServiceTests {
 	@Autowired
 	public CacklerService cacklerService;
 	
-	/*@Test
+	@Test
 	public void findDepartmentById(){
 		Department department = cacklerService.getDeptById(3);
 		System.out.println(department.getDepartmentName());
@@ -32,7 +32,7 @@ public class CacklersServiceTests {
 	@Test
 	public void findAllDepartments(){
 		Collection<Department> departments = this.cacklerService.findAllDepartments();
-		assertThat(departments.size()).isEqualTo(5);
+		assertThat(departments.size()).isEqualTo(3);
 	}
 	
 	@Test
@@ -41,19 +41,19 @@ public class CacklersServiceTests {
 		dept.setId(4);
 		dept.setDepartmentName("Finance Department");
 		this.cacklerService.saveDepartment(dept);
-	}*/
+	}
 	
-	/*@Test
+	@Test
 	public void saveDepartmentShorterVersion(){
 		Department dept = new Department();
 		dept.setId(7);
 		dept.setDepartmentName("Medicine");
 		this.cacklerService.saveDepartment(dept);
-	}*/
+	}
 	
 	@Test
 	public void deleteDepartment(){
-		this.cacklerService.deleteDepartment(7);{
+		this.cacklerService.deleteDepartment(5);{
 			
 		}
 	}

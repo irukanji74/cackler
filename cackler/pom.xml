@@ -61,6 +61,13 @@
 			<version>4.0.5.RELEASE</version>
 		</dependency>
 
+		<!--  https://mvnrepository.com/artifact/org.springframework/spring-orm 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>4.1.4.RELEASE</version>
+		</dependency> -->
+
 
 		<!-- Juniting -->
 		<dependency>
@@ -152,8 +159,8 @@
 			<artifactId>tomcat-jdbc</artifactId>
 			<version>7.0.57</version>
 		</dependency>
-		
-		<!-- ????????????   -->
+
+		<!-- ???????????? -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>

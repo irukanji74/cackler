@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -17,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+//import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.stereotype.Repository;
 
 import model.Department;
@@ -38,22 +40,22 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 	}
 
 	@Override
-	public Department findById(int id) throws DataAccessException {
+	public Department findById(int id)  {
 		Department department;
-		Map<String, Object> params = new HashMap<>();
-		params.put("id", id);
-		System.out.println(id+"");
-		department = this.namedParameterJdbcTemplate.queryForObject("SELECT department_name FROM department WHERE id= :id"
-				                                                    , params
-				                                                    ,BeanPropertyRowMapper.newInstance(Department.class));
-		System.out.println(department.getDepartmentName());
+		
+			Map<String, Object> params = new HashMap<>();
+			params.put("id", id);
+			department = this.namedParameterJdbcTemplate.queryForObject(
+					"SELECT department_name FROM department WHERE id= :id", params,
+					BeanPropertyRowMapper.newInstance(Department.class));
+		
 		return department;
 	}
 
 	@Override
 	public Collection<Department> findAllDepartments() throws DataAccessException {
-		Collection<Department> depts = this.namedParameterJdbcTemplate.query("SELECT id, department_name FROM department"
-				, new RowMapper<Department>(){
+		Collection<Department> depts = this.namedParameterJdbcTemplate
+				.query("SELECT id, department_name FROM department", new RowMapper<Department>() {
 					@Override
 					public Department mapRow(ResultSet rs, int rowNum) throws SQLException {
 						Department department = new Department();
@@ -61,55 +63,61 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 						department.setDepartmentName("department_name");
 						return department;
 					}
-					
+
 				});
-				
-				/* Why not working!!!!!???????(
-				"SELECT id, department_name FROM department"
-                , new HashMap<String, Object>()
-                , BeanPropertyRowMapper.newInstance(Department.class));*/
+
+		/*
+		 * Why not working!!!!!???????(
+		 * "SELECT id, department_name FROM department" , new HashMap<String,
+		 * Object>() , BeanPropertyRowMapper.newInstance(Department.class));
+		 */
 		System.err.println(depts.size());
 		return depts;
 	}
 
 	@Override
 	public void saveOrUpdate(Department department) throws DataAccessException {
-		 //this obj is retrieving all the properties from owner.
+		// this obj is retrieving all the properties from owner.
 		BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
-		if(department.isNew()){
-		     
-		     
-		      //department.Number newKey = this.simpleJdbcInsert.executeAndReturnKey(parameterSource);
-		      //System.out.println(newKey.intValue());
-		      //department.setId(newKey.intValue());
-			
-			 //Version simplyfying and shortening the number of code
-		this.namedParameterJdbcTemplate.update("Insert into department (id, department_name) values (:id, :departmentName)"
-				                               , parameterSource);
-			
-		}else{
-			
-			//update existing department
-			this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id"
-					                                , parameterSource);
+		if (department.isNew()) {
+
+			// department.Number newKey =
+			// this.simpleJdbcInsert.executeAndReturnKey(parameterSource);
+			// System.out.println(newKey.intValue());
+			// department.setId(newKey.intValue());
+
+			// Version simplyfying and shortening the number of code
+			this.namedParameterJdbcTemplate.update(
+					"Insert into department (id, department_name) values (:id, :departmentName)", parameterSource);
+
+		} else {
+
+			// update existing department
+			this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id",
+					parameterSource);
 		}
-		//Primitive version, too much of code
-		/*String sqlQuery = "Insert into department (id, department_name) values (:id, :departmentName)";
-		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-		mapSqlParameterSource.addValue("id", department.getId());
-		mapSqlParameterSource.addValue("departmentName",department.getDepartmentName());
-		this.namedParameterJdbcTemplate.update(sqlQuery, mapSqlParameterSource);
-*/
+		// Primitive version, too much of code
+		/*
+		 * String sqlQuery =
+		 * "Insert into department (id, department_name) values (:id, :departmentName)"
+		 * ; MapSqlParameterSource mapSqlParameterSource = new
+		 * MapSqlParameterSource(); mapSqlParameterSource.addValue("id",
+		 * department.getId());
+		 * mapSqlParameterSource.addValue("departmentName",department.
+		 * getDepartmentName());
+		 * this.namedParameterJdbcTemplate.update(sqlQuery,
+		 * mapSqlParameterSource);
+		 */
 	}
 
 	@Override
 	public void removeDepartment(int id) throws DataAccessException {
 		final String deleteSql = "DELETE FROM department WHERE id = :id";
 		SqlParameterSource paramSource = new MapSqlParameterSource("id", id);
-		
+
 		this.namedParameterJdbcTemplate.update(deleteSql, paramSource);
 
 	}
-     //All the CRUD ops with NamedParameterJdbcTemplate
-	//http://www.dineshonjava.com/2012/12/using-namedparameterjdbctemplate-in.html#.V_i2g_mLTDc
+	// All the CRUD ops with NamedParameterJdbcTemplate
+	// http://www.dineshonjava.com/2012/12/using-namedparameterjdbctemplate-in.html#.V_i2g_mLTDc
 }
