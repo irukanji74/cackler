@@ -73,15 +73,21 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 
 	@Override
 	public void saveOrUpdate(Department department) throws DataAccessException {
-		//Version simplyfying and shortening the number of code
-		//this obj is retrieving all the properties from owner.
+		 //this obj is retrieving all the properties from owner.
 		BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
-		//department.Number newKey = this.simpleJdbcInsert.executeAndReturnKey(parameterSource);
-		//System.out.println(newKey.intValue());
-		//department.setId(newKey.intValue());
+		
+		if(department.isNew()){
+		      //Version simplyfying and shortening the number of code
+		     
+		      //department.Number newKey = this.simpleJdbcInsert.executeAndReturnKey(parameterSource);
+		      //System.out.println(newKey.intValue());
+		      //department.setId(newKey.intValue());
 		this.namedParameterJdbcTemplate.update("Insert into department (id, department_name) values (:id, :departmentName)"
 				                               , parameterSource);
-		
+		}else{
+			this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id"
+					                                , parameterSource);
+		}
 		//Primitive version, too much of code
 		/*String sqlQuery = "Insert into department (id, department_name) values (:id, :departmentName)";
 		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
