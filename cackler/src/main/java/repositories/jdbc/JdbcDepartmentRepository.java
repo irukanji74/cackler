@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -75,16 +76,20 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 	public void saveOrUpdate(Department department) throws DataAccessException {
 		 //this obj is retrieving all the properties from owner.
 		BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
-		
 		if(department.isNew()){
-		      //Version simplyfying and shortening the number of code
+		     
 		     
 		      //department.Number newKey = this.simpleJdbcInsert.executeAndReturnKey(parameterSource);
 		      //System.out.println(newKey.intValue());
 		      //department.setId(newKey.intValue());
+			
+			 //Version simplyfying and shortening the number of code
 		this.namedParameterJdbcTemplate.update("Insert into department (id, department_name) values (:id, :departmentName)"
 				                               , parameterSource);
+			
 		}else{
+			
+			//update existing department
 			this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id"
 					                                , parameterSource);
 		}
@@ -98,9 +103,13 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 	}
 
 	@Override
-	public void removeDepartment(Department deparment) throws DataAccessException {
-		// TODO Auto-generated method stub
+	public void removeDepartment(int id) throws DataAccessException {
+		final String deleteSql = "DELETE FROM department WHERE id = :id";
+		SqlParameterSource paramSource = new MapSqlParameterSource("id", id);
+		
+		this.namedParameterJdbcTemplate.update(deleteSql, paramSource);
 
 	}
-
+     //All the CRUD ops with NamedParameterJdbcTemplate
+	//http://www.dineshonjava.com/2012/12/using-namedparameterjdbctemplate-in.html#.V_i2g_mLTDc
 }

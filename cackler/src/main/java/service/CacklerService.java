@@ -36,7 +36,11 @@ public class CacklerService {
 	@Transactional
 	public void saveDepartment(Department dept) {
 		this.departmentRepository.saveOrUpdate(dept);
-
+	}
+	
+	@Transactional
+	public void deleteDepartment(int id){
+		this.departmentRepository.removeDepartment(id);
 	}
 
 }

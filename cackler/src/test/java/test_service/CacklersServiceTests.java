@@ -43,15 +43,20 @@ public class CacklersServiceTests {
 		this.cacklerService.saveDepartment(dept);
 	}*/
 	
-	@Test
+	/*@Test
 	public void saveDepartmentShorterVersion(){
 		Department dept = new Department();
 		dept.setId(7);
-		dept.setDepartmentName("CEO");
+		dept.setDepartmentName("Medicine");
 		this.cacklerService.saveDepartment(dept);
+	}*/
+	
+	@Test
+	public void deleteDepartment(){
+		this.cacklerService.deleteDepartment(7);{
+			
+		}
 	}
-	
-	
 	
 	
 	
