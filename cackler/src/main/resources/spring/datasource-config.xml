@@ -22,6 +22,7 @@
     <!-- (in this case, JDBC-related settings for the dataSource definition below) -->
     <context:property-placeholder location="classpath:spring/data-access.properties" system-properties-mode="OVERRIDE"/>
     
+    <!--All about datasources http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jdbc-connections  -->
     <!-- Database initializer. If any of the script fails, the initialization stops. -->
     <!-- As an alternative, for embedded databases see <jdbc:embedded-database/>. -->
     <jdbc:initialize-database data-source="dataSource">

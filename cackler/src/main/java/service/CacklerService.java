@@ -27,7 +27,7 @@ public class CacklerService {
 		return this.departmentRepository.findAllDepartments();
 	}
 
-	@Transactional
+	@Transactional(readOnly=true)
 	public Department getDeptById(int i) {
 		Department department = this.departmentRepository.findById(i);
 		return department;
@@ -41,6 +41,12 @@ public class CacklerService {
 	@Transactional
 	public void deleteDepartment(int id){
 		this.departmentRepository.removeDepartment(id);
+	}
+
+	@Transactional
+	public void saveOrUpdateWithSimpleJdbcInsert(Department dept) {
+		this.departmentRepository.saveOrUpdateWithSimpleJdbcInsert(dept);
+		
 	}
 
 }

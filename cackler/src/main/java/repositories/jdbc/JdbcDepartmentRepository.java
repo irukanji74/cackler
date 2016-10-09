@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +29,11 @@ import repositories.DepartmentRepository;
 @Repository
 public class JdbcDepartmentRepository implements DepartmentRepository {
 
+	// All the CRUD ops with NamedParameterJdbcTemplate
+    // http://www.dineshonjava.com/2012/12/using-namedparameterjdbctemplate-in.html#.V_i2g_mLTDc
+	
+	// if i want to use SimpleJdbcTemplate instance i can get it by
+	// JdbcTemplate template = (JdbcTemplate)namedParameterJdbcTemplate.getJdbcOperations();
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	private SimpleJdbcInsert simpleJdbcInsert;
@@ -35,20 +42,20 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 	public JdbcDepartmentRepository(DataSource dataSource) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		System.out.println(namedParameterJdbcTemplate);
-		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("offices")
+		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("department")
 				.usingGeneratedKeyColumns("id");
 	}
 
 	@Override
-	public Department findById(int id)  {
+	public Department findById(int id) {
 		Department department;
-		
-			Map<String, Object> params = new HashMap<>();
-			params.put("id", id);
-			department = this.namedParameterJdbcTemplate.queryForObject(
-					"SELECT department_name FROM department WHERE id= :id", params,
-					BeanPropertyRowMapper.newInstance(Department.class));
-		
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("id", id);
+		department = this.namedParameterJdbcTemplate.queryForObject(
+				"SELECT department_name FROM department WHERE id= :id", params,
+				BeanPropertyRowMapper.newInstance(Department.class));
+
 		return department;
 	}
 
@@ -81,6 +88,9 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 		BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
 		if (department.isNew()) {
 
+			//How to retrieve an auto generated key 
+			//http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jdbc-auto-genereted-keys
+			
 			// department.Number newKey =
 			// this.simpleJdbcInsert.executeAndReturnKey(parameterSource);
 			// System.out.println(newKey.intValue());
@@ -98,7 +108,8 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 		}
 		// Primitive version, too much of code
 		/*
-		 * String sqlQuery =
+		 * @Override public void saveOrUpdate(Department department) throws
+		 * DataAccessException { String sqlQuery =
 		 * "Insert into department (id, department_name) values (:id, :departmentName)"
 		 * ; MapSqlParameterSource mapSqlParameterSource = new
 		 * MapSqlParameterSource(); mapSqlParameterSource.addValue("id",
@@ -106,8 +117,24 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 		 * mapSqlParameterSource.addValue("departmentName",department.
 		 * getDepartmentName());
 		 * this.namedParameterJdbcTemplate.update(sqlQuery,
-		 * mapSqlParameterSource);
+		 * mapSqlParameterSource); }
 		 */
+	}
+
+	@Override
+	public void saveOrUpdateWithSimpleJdbcInsert(Department department) throws DataAccessException {
+		BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
+		String sqlQuery = "Insert into department (id, department_name) values (:id, :departmentName)";
+		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+		mapSqlParameterSource.addValue("id", department.getId());
+		mapSqlParameterSource.addValue("departmentName", department.getDepartmentName());
+		if (department.isNew()) {
+			simpleJdbcInsert.execute(mapSqlParameterSource);
+		} else {
+			// update existing department
+			this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id",
+					parameterSource);
+		}
 	}
 
 	@Override
@@ -118,6 +145,5 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 		this.namedParameterJdbcTemplate.update(deleteSql, paramSource);
 
 	}
-	// All the CRUD ops with NamedParameterJdbcTemplate
-	// http://www.dineshonjava.com/2012/12/using-namedparameterjdbctemplate-in.html#.V_i2g_mLTDc
+	
 }

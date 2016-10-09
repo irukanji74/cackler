@@ -22,7 +22,7 @@ public class CacklersServiceTests {
 	@Autowired
 	public CacklerService cacklerService;
 	
-	@Test
+	/*@Test
 	public void findDepartmentById(){
 		Department department = cacklerService.getDeptById(3);
 		System.out.println(department.getDepartmentName());
@@ -54,10 +54,16 @@ public class CacklersServiceTests {
 	@Test
 	public void deleteDepartment(){
 		this.cacklerService.deleteDepartment(5);{
-			
 		}
-	}
+	}*/
 	
+	@Test
+	public void saveOrUpdateWithSimpleJdbcInsert(){
+		Department dept = new Department();
+		dept.setId(4);
+		dept.setDepartmentName("SEO");
+		this.cacklerService.saveOrUpdateWithSimpleJdbcInsert(dept);
+	}
 	
 	
 	
