@@ -30,6 +30,13 @@
 			<artifactId>jsp-api</artifactId>
 			<version>2.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl-api -->
+		<dependency>
+			<groupId>javax.servlet.jsp.jstl</groupId>
+			<artifactId>jstl-api</artifactId>
+			<version>1.2</version>
+		</dependency>
+
 		<!-- Spring JDBC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -61,13 +68,13 @@
 			<version>4.0.5.RELEASE</version>
 		</dependency>
 
-		<!--  https://mvnrepository.com/artifact/org.springframework/spring-orm 
-		Others versions throw exceptions???!!!-->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm 
+			Others versions throw exceptions???!!! -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>3.2.0.RELEASE</version>
-		</dependency> 
+		</dependency>
 
 
 		<!-- Juniting -->
