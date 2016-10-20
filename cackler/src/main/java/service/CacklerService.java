@@ -39,8 +39,8 @@ public class CacklerService {
 	}
 	
 	@Transactional
-	public void deleteDepartment(int id){
-		this.departmentRepository.removeDepartment(id);
+	public void deleteDepartment(String name){
+		this.departmentRepository.removeDepartment(name);
 	}
 
 	@Transactional

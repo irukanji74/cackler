@@ -3,6 +3,8 @@
 <html>
 <body>
 <h2>Hello World!</h2>
-The time on server is <%= new java.util.Date() %>
+<%-- The time on server is <%= new java.util.Date() %> --%>
+
+<a href="/departments-list" > Show the list of all available departments</a>
 </body>
 </html>

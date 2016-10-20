@@ -21,6 +21,6 @@ public class BaseEntity {
 	}
 	
 	public boolean isNew(){
-		return (this.id == null);
+		return (this.getId() == null);
 	}
 }

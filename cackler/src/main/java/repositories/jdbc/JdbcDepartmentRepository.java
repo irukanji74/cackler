@@ -49,11 +49,11 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 	@Override
 	public Department findById(int id) {
 		Department department;
-
 		Map<String, Object> params = new HashMap<>();
 		params.put("id", id);
 		department = this.namedParameterJdbcTemplate.queryForObject(
-				"SELECT department_name FROM department WHERE id= :id", params,
+				"SELECT department_name FROM department WHERE id= :id"
+				, params,
 				BeanPropertyRowMapper.newInstance(Department.class));
 
 		return department;
@@ -72,7 +72,7 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 					}
 
 				});
-
+ 
 		/*
 		 * Why not working!!!!!???????(
 		 * "SELECT id, department_name FROM department" , new HashMap<String,
@@ -87,7 +87,6 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 		// this obj is retrieving all the properties from owner.
 		BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
 		if (department.isNew()) {
-
 			//How to retrieve an auto generated key 
 			//http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jdbc-auto-genereted-keys
 			
@@ -97,16 +96,17 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 			// department.setId(newKey.intValue());
 
 			// Version simplyfying and shortening the number of code
-			this.namedParameterJdbcTemplate.update(
+			int rowAffected = this.namedParameterJdbcTemplate.update(
 					"Insert into department (id, department_name) values (:id, :departmentName)", parameterSource);
-
+			System.err.println(rowAffected);
+		
 		} else {
-
 			// update existing department
-			this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id",
+			int rowAffected = this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id",
 					parameterSource);
+			System.err.println(rowAffected);
 		}
-		// Primitive version, too much of code
+		//Primitive version, too much of code
 		/*
 		 * @Override public void saveOrUpdate(Department department) throws
 		 * DataAccessException { String sqlQuery =
@@ -129,18 +129,18 @@ public class JdbcDepartmentRepository implements DepartmentRepository {
 		mapSqlParameterSource.addValue("id", department.getId());
 		mapSqlParameterSource.addValue("departmentName", department.getDepartmentName());
 		if (department.isNew()) {
-			simpleJdbcInsert.execute(mapSqlParameterSource);
+			simpleJdbcInsert.execute(parameterSource);
 		} else {
 			// update existing department
 			this.namedParameterJdbcTemplate.update("UPDATE department SET department_name=:departmentName WHERE id=:id",
-					parameterSource);
+					mapSqlParameterSource);
 		}
 	}
 
 	@Override
-	public void removeDepartment(int id) throws DataAccessException {
-		final String deleteSql = "DELETE FROM department WHERE id = :id";
-		SqlParameterSource paramSource = new MapSqlParameterSource("id", id);
+	public void removeDepartment(String name) throws DataAccessException {
+		final String deleteSql = "DELETE FROM department WHERE department_name = :departmentName";
+		SqlParameterSource paramSource = new MapSqlParameterSource("departmentName", name);
 
 		this.namedParameterJdbcTemplate.update(deleteSql, paramSource);
 
